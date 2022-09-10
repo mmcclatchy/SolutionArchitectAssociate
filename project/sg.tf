@@ -1,6 +1,6 @@
 resource "aws_security_group" "main" {
   name   = "main"
-  vpc_id = aws_vpc.main.id
+  vpc_id = local.default_vpc_id
 
   ingress {
     description = "SSH"
