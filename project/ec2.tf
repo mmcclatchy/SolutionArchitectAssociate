@@ -9,7 +9,7 @@ resource "aws_key_pair" "aws_linux_private" {
 }
 
 resource "aws_key_pair" "windows" {
-  key_name   = "saa_aws_linux_private"
+  key_name   = "saa_windows"
   public_key = local.common_tags["WINDOWS_KEY"]
 }
 
