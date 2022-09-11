@@ -14,6 +14,7 @@ resource "aws_instance" "aws_linux_public" {
   key_name               = aws_key_pair.aws_linux_public.key_name
   vpc_security_group_ids = [aws_security_group.web_access.id]
   subnet_id              = local.subnet_1a_id
+  user_data              = filebase64("./user-data-app-group.sh")
 
   tags = {
     Name = "TF AWS Linux -- Public"

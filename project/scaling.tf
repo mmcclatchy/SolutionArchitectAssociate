@@ -13,8 +13,12 @@ resource "aws_launch_template" "linux_public" {
     enabled = true
   }
 
-  tags = {
-    Name = "TF Linux Public"
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name = "TF Linux Public ALB"
+    }
   }
 }
 
@@ -34,6 +38,25 @@ resource "aws_lb_target_group" "alb" {
     path     = "/"
     matcher  = "200-299"
   }
+}
+
+resource "aws_lb_target_group" "alb0" {
+  name     = "tf-tg-alb0"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = local.default_vpc_id
+
+  health_check {
+    enabled  = true
+    protocol = "HTTP"
+    path     = "/"
+    matcher  = "200-299"
+  }
+}
+
+resource "aws_lb_target_group_attachment" "linux_public" {
+  target_group_arn = aws_lb_target_group.alb0.arn
+  target_id        = aws_instance.aws_linux_public.id
 }
 
 /* resource "aws_lb_target_group" "nlb" {
@@ -122,6 +145,38 @@ resource "aws_lb_listener" "alb" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb.arn
+  }
+}
+
+resource "aws_lb_listener_rule" "app_group_a" {
+  listener_arn = aws_lb_listener.alb.arn
+
+  condition {
+    query_string {
+      key   = "AppGroup"
+      value = "A"
+    }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb.arn
+  }
+}
+
+resource "aws_lb_listener_rule" "app_group_b" {
+  listener_arn = aws_lb_listener.alb.arn
+
+  condition {
+    query_string {
+      key   = "AppGroup"
+      value = "B"
+    }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb0.arn
   }
 }
 
