@@ -1,4 +1,4 @@
-resource "aws_security_group" "main" {
+resource "aws_security_group" "web_access" {
   name   = "main"
   vpc_id = local.default_vpc_id
 
@@ -18,6 +18,14 @@ resource "aws_security_group" "main" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -26,6 +34,6 @@ resource "aws_security_group" "main" {
   }
 
   tags = {
-    Name = "TF Main"
+    Name = "TF Web Access"
   }
 }

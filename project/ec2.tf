@@ -8,16 +8,11 @@ resource "aws_key_pair" "aws_linux_private" {
   public_key = local.common_tags["AWS_LINUX_PRIVATE_KEY"]
 }
 
-resource "aws_key_pair" "windows" {
-  key_name   = "saa_windows"
-  public_key = local.common_tags["WINDOWS_KEY"]
-}
-
 resource "aws_instance" "aws_linux_public" {
-  ami                    = "ami-05fa00d4c63e32376"
-  instance_type          = "t2.micro"
+  ami                    = local.linux_ami_id
+  instance_type          = local.ec2_instance_type
   key_name               = aws_key_pair.aws_linux_public.key_name
-  vpc_security_group_ids = [aws_security_group.main.id]
+  vpc_security_group_ids = [aws_security_group.web_access.id]
   subnet_id              = local.subnet_1a_id
 
   tags = {
@@ -34,10 +29,10 @@ resource "aws_instance" "aws_linux_public" {
 }
 
 resource "aws_instance" "aws_linux_private" {
-  ami                    = "ami-05fa00d4c63e32376"
-  instance_type          = "t2.micro"
+  ami                    = local.linux_ami_id
+  instance_type          = local.ec2_instance_type
   key_name               = aws_key_pair.aws_linux_private.key_name
-  vpc_security_group_ids = [aws_security_group.main.id]
+  vpc_security_group_ids = [aws_security_group.web_access.id]
   subnet_id              = aws_subnet.private.id
 
   tags = {
@@ -53,10 +48,16 @@ resource "aws_instance" "aws_linux_private" {
   }
 }
 
-resource "aws_instance" "windows" {
+/*
+ resource "aws_key_pair" "windows" {
+  key_name   = "saa_windows"
+  public_key = local.common_tags["WINDOWS_KEY"]
+}
+
+ resource "aws_instance" "windows" {
   ami                    = "ami-0c95d38b24a19de18"
   instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.main.id]
+  vpc_security_group_ids = [aws_security_group.web_access.id]
   subnet_id              = local.subnet_1a_id
 
   tags = {
@@ -71,3 +72,4 @@ resource "aws_instance" "windows" {
     timeout     = "4m"
   }
 }
+*/
