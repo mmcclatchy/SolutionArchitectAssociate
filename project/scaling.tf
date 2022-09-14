@@ -54,10 +54,10 @@ resource "aws_lb_target_group" "alb0" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "linux_public" {
+/* resource "aws_lb_target_group_attachment" "linux_public" {
   target_group_arn = aws_lb_target_group.alb0.arn
   target_id        = aws_instance.aws_linux_public.id
-}
+} */
 
 /* resource "aws_lb_target_group" "nlb" {
     name = "tf-tg-nlb"

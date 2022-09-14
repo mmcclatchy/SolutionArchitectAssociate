@@ -8,7 +8,7 @@ resource "aws_key_pair" "aws_linux_private" {
   public_key = local.common_tags["AWS_LINUX_PRIVATE_KEY"]
 }
 
-resource "aws_instance" "aws_linux_public" {
+/* resource "aws_instance" "aws_linux_public" {
   ami                    = local.linux_ami_id
   instance_type          = local.ec2_instance_type
   key_name               = aws_key_pair.aws_linux_public.key_name
@@ -47,7 +47,7 @@ resource "aws_instance" "aws_linux_private" {
     private_key = file("/home/mark/.ssh/saa_aws_linux_private")
     timeout     = "4m"
   }
-}
+} */
 
 /*
  resource "aws_key_pair" "windows" {
